@@ -25,7 +25,11 @@ class TodoApp extends PureComponent {
   }
 
   handleDelete = e => {
-    this.setState({tasks: this.state.tasks.filter(task => task.uuid !== e.target.parentElement.parentElement.id)});
+    this.setState({tasks: this.state.tasks.filter(task => task.uuid !== e.target.parentElement.parentElement.parentElement.id)});
+  }
+
+  handleComplete = e => {
+    e.target.parentElement.parentElement.parentElement.style.background = 'lightgreen';
   }
 
   render() {
@@ -45,7 +49,10 @@ class TodoApp extends PureComponent {
               tasks.map((task, i) => (
                 <ListItem style={listItem} key={i} id={task.uuid.toString()} >
                   {task.name}
-                  <DeleteIcon onClick={this.handleDelete}/>
+                  <span style={{display: 'flex', cursor: 'pointer'}}>
+                    <span onClick={this.handleComplete}><strong>&#10003;</strong></span>
+                    <DeleteIcon onClick={this.handleDelete} style={{cursor: 'pointer'}}/>
+                  </span>
                 </ListItem>
               ))
             }
