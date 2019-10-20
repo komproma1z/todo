@@ -36,6 +36,18 @@ class TodoApp extends PureComponent {
         e.target.parentElement.parentElement.parentElement.style.background = 'lightgreen';
     }
 
+    handleEdit = e => {
+        if (e.target.parentElement.previousSibling.contentEditable !== 'true') {
+            e.target.parentElement.previousSibling.contentEditable = true;
+            e.target.parentElement.previousSibling.style.border = '1px solid red';
+            e.target.style.color = 'red';
+        } else {
+            e.target.parentElement.previousSibling.contentEditable = false;
+            e.target.parentElement.previousSibling.style.border = '';
+            e.target.style.color = '';
+        }
+    }
+
     render() {
 
         const { inputValue, tasks } = this.state;
@@ -53,6 +65,7 @@ class TodoApp extends PureComponent {
                         tasks={tasks}
                         handleDelete={this.handleDelete} 
                         handleComplete={this.handleComplete}
+                        handleEdit={this.handleEdit}
                     />
                 </Paper>
             </div>
@@ -69,10 +82,12 @@ const paper = {
     'display': 'flex',
     'alignItems': 'center',
     'flexDirection': 'column',
-    'width': '300px',
+    'minWidth': '300px',
+    'maxWidth': '700px',
     'height': '500px',
     'marginTop': '50px',
     'overflow': 'overlay',
+    "wordBreak": "break-word",
 }
 
 export default TodoApp;
