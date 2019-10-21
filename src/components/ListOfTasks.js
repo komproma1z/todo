@@ -13,8 +13,8 @@ class ListOfTasks extends PureComponent {
             <List component="nav" aria-label="main mailbox folders" style={list}>
             {
                 tasks.map((task, i) => (
-                <ListItem style={listItem} key={i} id={task.uuid.toString()} >
-                    <span style={{ padding: "2px"}}>{task.name}</span>
+                <ListItem style={listItem} key={i} id={task.uuid} >
+                    <span style={{padding: "2px"}}>{task.title}</span>
                     <span style={{display: 'flex', cursor: 'pointer'}}>
                         <span onClick={handleComplete} style={icon}><strong>&#10003;</strong></span>
                         <span onClick={handleEdit} style={icon}>&#9998;</span>
@@ -38,6 +38,7 @@ const listItem = {
 
 const icon = {
     'marginLeft': '10px',
+    'userSelect': 'none',
 }
 
 export default ListOfTasks;

@@ -13,6 +13,8 @@ class TodoApp extends PureComponent {
     state = {
         inputValue: '',
         tasks: [],
+        lastEditedTaskTitle: '',
+        alertCounter: '',
     }
 
     handleSubmit = e => {
@@ -20,7 +22,7 @@ class TodoApp extends PureComponent {
         if (this.state.inputValue.length === 0) {
             return;
         } else {
-            this.setState({tasks: [...this.state.tasks, {name: this.state.inputValue, uuid: uuid()}], inputValue: '', });
+            this.setState({tasks: [...this.state.tasks, {title: this.state.inputValue, uuid: uuid()}], inputValue: '', });
         }
     }
 
@@ -37,14 +39,30 @@ class TodoApp extends PureComponent {
     }
 
     handleEdit = e => {
-        if (e.target.parentElement.previousSibling.contentEditable !== 'true') {
-            e.target.parentElement.previousSibling.contentEditable = true;
-            e.target.parentElement.previousSibling.style.border = '1px solid red';
+
+        const taskText = e.target.parentElement.previousSibling;
+        const nodeId = e.target.parentElement.parentElement.id;
+        this.setState({lastEditedTaskTitle: taskText.innerText});
+
+        if (taskText.contentEditable !== 'true') {
+            taskText.contentEditable = true;
+            taskText.style.border = '1px solid red';
             e.target.style.color = 'red';
+            if (this.state.alertCounter != 1) {
+                setTimeout(() => {
+                    alert("Edit task text whilst in red border, then click the Edit button again to finish.");
+                    this.setState({alertCounter: 1});
+                }, 100);
+            }
         } else {
-            e.target.parentElement.previousSibling.contentEditable = false;
-            e.target.parentElement.previousSibling.style.border = '';
+            taskText.contentEditable = false;
+            taskText.style.border = '';
             e.target.style.color = '';
+            if (taskText.innerText !== this.state.lastEditedTaskTitle) {
+                const taskObject = this.state.tasks.filter(task => task.uuid === nodeId)[0];
+                taskObject.title = taskText.innerText;
+                this.setState({tasks: [...this.state.tasks.filter(task => task.uuid !== nodeId), taskObject]});
+            }
         }
     }
 
